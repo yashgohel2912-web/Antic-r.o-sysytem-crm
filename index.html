@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="gu">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#063b68"><title>Antic R.O System CRM</title>
+<style>
+:root{--navy:#063b68;--blue:#087fc1;--pale:#eef7fc;--ink:#17324a;--line:#d7e5ef}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Gujarati",sans-serif;background:#f4f8fb;color:var(--ink)}
+header{background:linear-gradient(120deg,#052e52,#087fc1);color:white;padding:18px 16px}
+.head{max-width:1100px;margin:auto;display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:14px;background:#fff;color:var(--navy);display:grid;place-items:center;font-weight:900;font-size:20px}
+h1{font-size:20px;margin:0 0 4px}header p{margin:0;font-size:13px;opacity:.9}
+main{max-width:1100px;margin:18px auto;padding:0 12px}.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:10px}
+button,.tab{border:0;border-radius:10px;padding:11px 14px;background:var(--navy);color:white;font-weight:700;cursor:pointer}
+.tab{white-space:nowrap;background:#dcebf5;color:var(--navy)}.tab.active{background:var(--navy);color:white}
+.panel{display:none;background:white;border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:8px;box-shadow:0 5px 20px #0a47700a}.panel.active{display:block}
+h2{font-size:18px;margin:0 0 14px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+label{display:block;font-size:13px;font-weight:700;margin-bottom:5px}input,textarea,select{width:100%;padding:11px;border:1px solid #cbdce8;border-radius:9px;font:inherit;background:#fff;color:var(--ink)}textarea{min-height:70px}
+.field{margin-bottom:12px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.secondary{background:#e5eef5;color:var(--navy)}.danger{background:#b83232}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px}.metric{background:var(--pale);padding:14px;border-radius:12px}.metric b{font-size:24px;display:block;color:var(--navy)}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}th,td{text-align:left;padding:9px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#f0f7fb}
+.tablewrap{overflow:auto}.hint{font-size:12px;color:#597184;line-height:1.5}.notice{background:#fff7df;border:1px solid #f0d58b;border-radius:10px;padding:11px;font-size:13px;margin:10px 0}
+@media(max-width:600px){header{padding:14px}.panel{padding:12px}h1{font-size:18px}}
+@media print{header,.tabs,.no-print,.notice{display:none!important}body{background:white}.panel{display:block;border:0;box-shadow:none}}
+</style></head>
+<body>
+<header><div class="head"><div class="logo" id="logoMark">A</div><div><h1 id="brandTitle">Antic R.O System CRM</h1><p>Customer • Sales • Service • Billing</p></div></div></header>
+<main>
+<div class="tabs no-print">
+<button class="tab active" data-tab="dashboard">Dashboard</button><button class="tab" data-tab="customers">Customers</button><button class="tab" data-tab="sales">R.O Sales</button><button class="tab" data-tab="services">Daily Service</button><button class="tab" data-tab="invoice">Invoice / PDF</button><button class="tab" data-tab="settings">Business Profile</button>
+</div>
+<section id="dashboard" class="panel active"><h2>Dashboard</h2><div class="cards"><div class="metric"><b id="mCustomers">0</b>Customers</div><div class="metric"><b id="mSales">0</b>R.O Sales</div><div class="metric"><b id="mToday">0</b>આજની સર્વિસ</div><div class="metric"><b id="mDue">0</b>Due / બાકી સર્વિસ</div></div><h2>આગામી સર્વિસ રિમાઇન્ડર</h2><div class="tablewrap"><table><thead><tr><th>ગ્રાહક</th><th>મોબાઇલ</th><th>મોડેલ</th><th>સર્વિસ તારીખ</th></tr></thead><tbody id="dueTable"></tbody></table></div><div class="notice">મહત્વપૂર્ણ: આ પ્રારંભિક વર્ઝનનો ડેટા આ બ્રાઉઝરમાં જ સેવ થાય છે. બ્રાઉઝર ડેટા ક્લિયર કરશો તો માહિતી ગુમાઈ શકે છે. બેકગ્રાઉન્ડ નોટિફિકેશન/ક્લાઉડ બેકઅપ માટે આગળ સુરક્ષિત ડેટાબેઝ અને PWA સેટઅપ જરૂરી છે.</div></section>
+<section id="customers" class="panel"><h2>Customer Management</h2><form id="customerForm"><div class="grid"><div class="field"><label>ગ્રાહકનું નામ *</label><input name="name" required></div><div class="field"><label>મોબાઇલ નંબર *</label><input name="phone" required inputmode="tel"></div><div class="field"><label>સરનામું</label><input name="address"></div></div><div class="actions"><button>ગ્રાહક સેવ કરો</button><button type="reset" class="secondary">Clear</button></div></form><div class="tablewrap"><table><thead><tr><th>નામ</th><th>મોબાઇલ</th><th>સરનામું</th><th></th></tr></thead><tbody id="customerRows"></tbody></table></div></section>
+<section id="sales" class="panel"><h2>R.O. Sales Entry</h2><form id="saleForm"><div class="grid"><div class="field"><label>ગ્રાહક *</label><select name="customer" id="saleCustomer" required></select></div><div class="field"><label>R.O. મોડેલ *</label><input name="model" required placeholder="ઉદા. 25 LPH Titan"></div><div class="field"><label>વેચાણ તારીખ *</label><input type="date" name="date" required></div><div class="field"><label>કિંમત (₹)</label><input type="number" name="price" min="0"></div><div class="field"><label>વોરંટી (મહિના)</label><input type="number" name="warranty" min="0" value="12"></div></div><div class="actions"><button>વેચાણ સેવ કરો</button></div></form><div class="tablewrap"><table><thead><tr><th>ગ્રાહક</th><th>મોડેલ</th><th>વેચાણ તારીખ</th><th>કિંમત</th><th>આગામી સર્વિસ</th></tr></thead><tbody id="salesRows"></tbody></table></div></section>
+<section id="services" class="panel"><h2>Daily Service List</h2><form id="serviceForm"><div class="grid"><div class="field"><label>ગ્રાહક *</label><select name="customer" id="serviceCustomer" required></select></div><div class="field"><label>સર્વિસ તારીખ *</label><input type="date" name="date" required></div><div class="field"><label>સર્વિસ પ્રકાર</label><input name="kind" placeholder="Regular / Repair / Filter change"></div><div class="field"><label>ચાર્જ (₹)</label><input name="charge" type="number" min="0"></div></div><div class="field"><label>નોંધ</label><textarea name="notes"></textarea></div><div class="actions"><button>સર્વિસ ઉમેરો</button></div></form><div class="tablewrap"><table><thead><tr><th>તારીખ</th><th>ગ્રાહક</th><th>સર્વિસ</th><th>ચાર્જ</th><th>સ્ટેટસ</th><th></th></tr></thead><tbody id="serviceRows"></tbody></table></div></section>
+<section id="invoice" class="panel"><h2>Invoice / Bill PDF</h2><form id="invoiceForm"><div class="grid"><div class="field"><label>ગ્રાહક</label><select name="customer" id="invoiceCustomer"></select></div><div class="field"><label>વસ્તુ / સર્વિસ</label><input name="item" required></div><div class="field"><label>રકમ (₹)</label><input name="amount" type="number" min="0" required></div><div class="field"><label>બિલ તારીખ</label><input name="date" type="date" required></div></div><div class="field"><label>નોંધ</label><input name="notes"></div><div class="actions no-print"><button type="button" onclick="makeInvoice()">બિલ પ્રિવ્યૂ</button><button type="button" class="secondary" onclick="window.print()">Print / Save PDF</button></div></form><div id="invoicePreview"></div></section>
+<section id="settings" class="panel"><h2>Business Profile</h2><form id="settingsForm"><div class="grid"><div class="field"><label>Business Name</label><input name="business" value="Antic R.O System"></div><div class="field"><label>મોબાઇલ</label><input name="mobile" value="9016094313"></div><div class="field"><label>સરનામું</label><input name="address" value="Shop No.1, Madhav Complex, Opp. Chetan Hardware, Canal Road, Rajkot"></div><div class="field"><label>લોગોનું ટૂંકું નામ (અસ્થાયી)</label><input name="mark" value="A"></div></div><div class="actions"><button>પ્રોફાઇલ સેવ કરો</button></div></form><p class="hint">તમારો અસલી લોગો પછી અપલોડ/જોડવાનો રહેશે.</p><div class="notice">WhatsApp: ગ્રાહકની એન્ટ્રી પછી તેના નંબર પરથી WhatsApp ખોલવાની સુવિધા આગળના અપડેટમાં જોડાશે. આ વર્ઝનમાં CRM નો મુખ્ય ડેટા અને બિલિંગ આધાર તૈયાર છે.</div><div class="actions"><button class="secondary" onclick="exportData()">ડેટા બેકઅપ JSON</button><button class="danger" onclick="clearAll()">બધો ડેટા ડિલીટ</button></div></section>
+</main>
+<script>
+const $=id=>document.getElementById(id), today=()=>new Date().toISOString().slice(0,10);
+let db=JSON.parse(localStorage.getItem('anticCRM')||'{"customers":[],"sales":[],"services":[],"profile":{}}');
+function save(){localStorage.setItem('anticCRM',JSON.stringify(db));render()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function nextService(d){let x=new Date((d||today())+'T12:00:00');x.setDate(x.getDate()+75);return x.toISOString().slice(0,10)}
+function customerName(id){return db.customers.find(c=>c.id===id)?.name||'ગ્રાહક કાઢી નાખ્યો'}
+function customerPhone(id){return db.customers.find(c=>c.id===id)?.phone||''}
+function options(id){$(id).innerHTML='<option value="">ગ્રાહક પસંદ કરો</option>'+db.customers.map(c=>`<option value="${c.id}">${esc(c.name)} — ${esc(c.phone)}</option>`).join('')}
+function render(){
+$('mCustomers').textContent=db.customers.length;$('mSales').textContent=db.sales.length;
+$('mToday').textContent=db.services.filter(s=>s.date===today()).length;
+$('mDue').textContent=db.sales.filter(s=>s.next<=today()).length;
+$('customerRows').innerHTML=db.customers.map(c=>`<tr><td>${esc(c.name)}</td><td>${esc(c.phone)} <a href="https://wa.me/${c.phone.replace(/\D/g,'')}" target="_blank">WhatsApp</a></td><td>${esc(c.address)}</td><td><button class="danger" onclick="del('customers','${c.id}')">ડિલીટ</button></td></tr>`).join('');
+$('salesRows').innerHTML=db.sales.map(s=>`<tr><td>${esc(customerName(s.customer))}</td><td>${esc(s.model)}</td><td>${s.date}</td><td>₹${s.price||0}</td><td>${s.next}</td></tr>`).join('');
+$('serviceRows').innerHTML=db.services.map(s=>`<tr><td>${s.date}</td><td>${esc(customerName(s.customer))}</td><td>${esc(s.kind)}</td><td>₹${s.charge||0}</td><td>${s.done?'પૂર્ણ':'બાકી'}</td><td><button class="secondary" onclick="toggleService('${s.id}')">${s.done?'ફરી ખોલો':'પૂર્ણ કરો'}</button></td></tr>`).join('');
+$('dueTable').innerHTML=db.sales.filter(s=>s.next>=today()).sort((a,b)=>a.next.localeCompare(b.next)).slice(0,12).map(s=>`<tr><td>${esc(customerName(s.customer))}</td><td>${esc(customerPhone(s.customer))}</td><td>${esc(s.model)}</td><td>${s.next}</td></tr>`).join('');
+['saleCustomer','serviceCustomer','invoiceCustomer'].forEach(options);
+let p=db.profile||{};if(p.business){$('brandTitle').textContent=p.business;$('logoMark').textContent=p.mark||'A'}
+}
+function del(type,id){if(confirm('આ રેકોર્ડ ડિલીટ કરવો છે?')){db[type]=db[type].filter(x=>x.id!==id);save()}}
+function toggleService(id){let s=db.services.find(x=>x.id===id);if(s){s.done=!s.done;save()}}
+function formObj(form){return Object.fromEntries(new FormData(form).entries())}
+$('customerForm').onsubmit=e=>{e.preventDefault();let x=formObj(e.target);db.customers.push({...x,id:crypto.randomUUID()});e.target.reset();save()};
+$('saleForm').onsubmit=e=>{e.preventDefault();let x=formObj(e.target);db.sales.push({...x,id:crypto.randomUUID(),next:nextService(x.date)});e.target.reset();save()};
+$('serviceForm').onsubmit=e=>{e.preventDefault();let x=formObj(e.target);db.services.push({...x,id:crypto.randomUUID(),done:false});e.target.reset();save()};
+$('settingsForm').onsubmit=e=>{e.preventDefault();db.profile=formObj(e.target);save();alert('Business profile સેવ થઈ ગઈ.')};
+function makeInvoice(){let x=formObj($('invoiceForm')),c=db.customers.find(c=>c.id===x.customer)||{};let p=db.profile||{};$('invoicePreview').innerHTML=`<div style="border:1px solid #ccd;padding:20px;margin-top:16px;color:#17324a"><h2>${esc(p.business||'Antic R.O System')}</h2><p>${esc(p.address||'')}<br>${esc(p.mobile||'')}</p><hr><h3>INVOICE</h3><p>તારીખ: ${esc(x.date)}<br>ગ્રાહક: ${esc(c.name||'')}<br>મોબાઇલ: ${esc(c.phone||'')}<br>સરનામું: ${esc(c.address||'')}</p><table><tr><th>વિગત</th><th>રકમ</th></tr><tr><td>${esc(x.item)}<br>${esc(x.notes)}</td><td>₹${esc(x.amount)}</td></tr></table><h3 style="text-align:right">કુલ: ₹${esc(x.amount)}</h3><p>Thank you for your business.</p></div>`}
+function exportData(){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:'application/json'}));a.download='antic-crm-backup.json';a.click();URL.revokeObjectURL(a.href)}
+function clearAll(){if(confirm('બધો CRM ડેટા કાયમ માટે ડિલીટ થશે. ચાલુ રાખવું?')){localStorage.removeItem('anticCRM');db={customers:[],sales:[],services:[],profile:{}};render()}}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab,.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.tab).classList.add('active')});
+$('saleForm').elements.date.value=today();$('serviceForm').elements.date.value=today();$('invoiceForm').elements.date.value=today();render();
+</script></body></html>
